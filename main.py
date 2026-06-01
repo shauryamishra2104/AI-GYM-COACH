@@ -13,7 +13,7 @@ from services.state.session_defaults import initial_session_defaults
 from services.config.workout_config import EXERCISE_OPTIONS
 from services.ui.style_loader import load_css,inject_local_font,inject_webrtc_styles
 from services.persistence.exercise_repository import init_db,add_exercise
-from streamlit_webrtc import webrtc_streamer,WebRtcMode
+from streamlit_webrtc import webrtc_streamer,WebRtcMode,RTCConfiguration
 from services.vision.exercise_video_processor import VideoProcessorClass
 from services.tracking.metrics import sync_metrics_update
 from services.persistence.exercise_repository import get_users_exercises
@@ -214,7 +214,7 @@ def main():
                 padding-top:1.5rem  !important;
             }
             </style>
-            
+
             <div style="
                 border:10px dashed #444;
                 border-radius: 0px;
@@ -233,11 +233,20 @@ def main():
         )
     
     else:
+        rtc_configuration = RTCConfiguration(
+            {
+                "iceServers": [
+                    {"urls": ["stun:stun.l.google.com:19302"]},
+                    {"urls": ["stun:stun1.l.google.com:19302"]},
+                ]
+            }
+        )
+
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration = {"iceServers" : [{"urls":["stun:stun.1.google.com:19302"]}]},
+            rtc_configuration = rtc_configuration,
             media_stream_constraints={
                 "video": True,
                 "audio":False,
