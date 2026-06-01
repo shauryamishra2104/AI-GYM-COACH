@@ -258,14 +258,14 @@ def main():
         # )
         # sync_metrics_update(context)
 
-        context = webrtc_streamer(
-            key="exercise-analysis",
-            mode=WebRtcMode.SENDRECV,
-            media_stream_constraints={
-                "video": True,
-                "audio": False,
-            }
-        )
+        # context = webrtc_streamer(
+        #     key="exercise-analysis",
+        #     mode=WebRtcMode.SENDRECV,
+        #     media_stream_constraints={
+        #         "video": True,
+        #         "audio": False,
+        #     }
+        # )
 
         # if context.state.playing:
         #     time.sleep(0.25)
