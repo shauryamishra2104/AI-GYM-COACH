@@ -1,11 +1,6 @@
 import os 
-os.environ["MEDIAPIPE_DISABLE_GPU"] = "1"
-os.environ["GLOG_logtostderr"] = "1"
-os.environ["DISPLAY"] = ":0"
-
 import streamlit as st
 from dotenv import load_dotenv
-
 import time
 import pandas as pd
 from services.auth.login_wall import render_login_wall
@@ -21,10 +16,6 @@ from groq import Groq
 from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline,autoplay_audio
-
-os.environ["MEDIAPIPE_DISABLE_GPU"] = "1"
-os.environ["GLOG_logtostderr"] = "1"
-os.environ["DISPLAY"] = ":0"
 
 
 def main():
@@ -233,9 +224,6 @@ def main():
         )
     
     else:
-        import logging
-        logging.getLogger("aioice").setLevel(logging.ERROR)
-        logging.getLogger("aiortc").setLevel(logging.ERROR)
         print("BEFORE WEBRTC")
         context = webrtc_streamer(
             key="exercise-analysis",
@@ -243,35 +231,19 @@ def main():
             video_processor_factory=VideoProcessorClass,
             rtc_configuration ={
                 "iceServers": [
-                    {"urls": "stun:stun.l.google.com:19302"},
-                    {
-                        "urls": "turn:openrelay.metered.ca:80",
-                        "username": "openrelayproject",
-                        "credential": "openrelayproject"
-                    }
-                ]
-            },
+                    {"urls": "stun:stun.l.google.com:19302"}]},
             media_stream_constraints={
                 "video": True,
                 "audio":False,
             },
-            async_processing=False
+            async_processing=True
         )
         print("AFTER WEBRTC")
         sync_metrics_update(context)
 
-        # context = webrtc_streamer(
-        #     key="exercise-analysis",
-        #     mode=WebRtcMode.SENDRECV,
-        #     media_stream_constraints={
-        #         "video": True,
-        #         "audio": False,
-        #     }
-        # )
-
-        # if context.state.playing:
-        #     time.sleep(0.25)
-        #     st.rerun()
+        if context.state.playing:
+            time.sleep(0.25)
+            st.rerun()
             
         inject_webrtc_styles()
     
