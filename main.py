@@ -1,6 +1,11 @@
+import os 
+os.environ["MEDIAPIPE_DISABLE_GPU"] = "1"
+os.environ["GLOG_logtostderr"] = "1"
+os.environ["DISPLAY"] = ":0"
+
 import streamlit as st
 from dotenv import load_dotenv
-import os 
+
 import time
 import pandas as pd
 from services.auth.login_wall import render_login_wall
@@ -18,7 +23,8 @@ from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline,autoplay_audio
 
 os.environ["MEDIAPIPE_DISABLE_GPU"] = "1"
-os.environ["XLA_FLAGS"] = "--xla_gpu_cuda_data_dir="
+os.environ["GLOG_logtostderr"] = "1"
+os.environ["DISPLAY"] = ":0"
 
 
 def main():
