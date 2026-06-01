@@ -17,6 +17,8 @@ from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline,autoplay_audio
 
+os.environ["MEDIAPIPE_DISABLE_GPU"] = "1"
+os.environ["XLA_FLAGS"] = "--xla_gpu_cuda_data_dir="
 
 
 def main():
