@@ -4,6 +4,7 @@ import os
 import cv2
 import av
 import numpy as np
+os.environ["MEDIAPIPE_DISABLE_GPU"] = "1"
 import mediapipe as mp
 
 from mediapipe.tasks import python
