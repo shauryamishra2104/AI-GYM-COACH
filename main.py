@@ -233,25 +233,28 @@ def main():
         )
     
     else:
-        rtc_configuration = RTCConfiguration(
-            {
-                "iceServers": [
-                    {"urls": ["stun:stun.l.google.com:19302"]},
-                    {"urls": ["stun:stun1.l.google.com:19302"]},
-                ]
-            }
-        )
-
+        import logging
+        logging.getLogger("aioice").setLevel(logging.ERROR)
+        logging.getLogger("aiortc").setLevel(logging.ERROR)
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration = rtc_configuration,
+            rtc_configuration ={
+                "iceServers": [
+                    {"urls": "stun:stun.l.google.com:19302"},
+                    {
+                        "urls": "turn:openrelay.metered.ca:80",
+                        "username": "openrelayproject",
+                        "credential": "openrelayproject"
+                    }
+                ]
+            },
             media_stream_constraints={
                 "video": True,
                 "audio":False,
             },
-            async_processing=True
+            async_processing=False
         )
         sync_metrics_update(context)
 
