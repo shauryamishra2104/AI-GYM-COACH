@@ -349,6 +349,7 @@ class VideoProcessorClass(VideoProcessorBase):
 
     # ---------------- MAIN ----------------
     def recv(self, frame):
+        print("RECV CALLED")
         image = frame.to_ndarray(format="bgr24")
         image = cv2.flip(image, 1)
 
