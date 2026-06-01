@@ -233,30 +233,39 @@ def main():
         )
     
     else:
-        import logging
-        logging.getLogger("aioice").setLevel(logging.ERROR)
-        logging.getLogger("aiortc").setLevel(logging.ERROR)
+        # import logging
+        # logging.getLogger("aioice").setLevel(logging.ERROR)
+        # logging.getLogger("aiortc").setLevel(logging.ERROR)
+        # context = webrtc_streamer(
+        #     key="exercise-analysis",
+        #     mode=WebRtcMode.SENDRECV,
+        #     video_processor_factory=VideoProcessorClass,
+        #     rtc_configuration ={
+        #         "iceServers": [
+        #             {"urls": "stun:stun.l.google.com:19302"},
+        #             {
+        #                 "urls": "turn:openrelay.metered.ca:80",
+        #                 "username": "openrelayproject",
+        #                 "credential": "openrelayproject"
+        #             }
+        #         ]
+        #     },
+        #     media_stream_constraints={
+        #         "video": True,
+        #         "audio":False,
+        #     },
+        #     async_processing=False
+        # )
+        # sync_metrics_update(context)
+
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
-            video_processor_factory=VideoProcessorClass,
-            rtc_configuration ={
-                "iceServers": [
-                    {"urls": "stun:stun.l.google.com:19302"},
-                    {
-                        "urls": "turn:openrelay.metered.ca:80",
-                        "username": "openrelayproject",
-                        "credential": "openrelayproject"
-                    }
-                ]
-            },
             media_stream_constraints={
                 "video": True,
-                "audio":False,
-            },
-            async_processing=False
+                "audio": False,
+            }
         )
-        sync_metrics_update(context)
 
         # if context.state.playing:
         #     time.sleep(0.25)
