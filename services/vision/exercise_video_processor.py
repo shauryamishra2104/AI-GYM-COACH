@@ -262,6 +262,7 @@ from detectors.lunges import LungesDetector
 class VideoProcessorClass(VideoProcessorBase):
 
     def __init__(self):
+        print("VIDEO PROCESSOR CREATED")
         self._lock = threading.Lock()
         self._latest_metrics = None
         self._exercise_type = "Squats"
