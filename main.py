@@ -203,6 +203,7 @@ def main():
     if not workout_started:
         st.markdown(
             """
+            <style>
              /* Hide Top Bar of Streamlit */
                 
             #MainMenu , footer, header {
@@ -212,7 +213,8 @@ def main():
             .block-container {
                 padding-top:1.5rem  !important;
             }
-
+            </style>
+            
             <div style="
                 border:10px dashed #444;
                 border-radius: 0px;
