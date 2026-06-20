@@ -19,15 +19,25 @@ from services.coaching.voice_pipeline import VoicePipeline,autoplay_audio
 
 from twilio.rest import Client
 
-def get_ice_servers():
-    account_sid = os.environ["TWILIO_ACCOUNT_SID"]
-    auth_token = os.environ["TWILIO_AUTH_TOKEN"]
-    client = Client(account_sid, auth_token)
-    token = client.tokens.create()
-    return token.ice_servers
+FALLBACK_RTC_CONFIG = RTCConfiguration({
+    "iceServers": [
+        {"urls": ["stun:stun.l.google.com:19302"]},
+        {"urls": ["stun:stun1.l.google.com:19302"]},
+        {"urls": ["turn:openrelay.metered.ca:80"], "username": "openrelayproject", "credential": "openrelayproject"},
+        {"urls": ["turn:openrelay.metered.ca:443"], "username": "openrelayproject", "credential": "openrelayproject"},
+        {"urls": ["turn:openrelay.metered.ca:443?transport=tcp"], "username": "openrelayproject", "credential": "openrelayproject"},
+    ]
+})
 
-RTC_CONFIG = RTCConfiguration({"iceServers": get_ice_servers()})
-
+@st.cache_data(ttl=3000)
+def get_rtc_config():
+    try:
+        client = Client(os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"])
+        token = client.tokens.create()
+        return RTCConfiguration({"iceServers": token.ice_servers})
+    except Exception as e:
+        st.warning(f"Twilio TURN unavailable, using fallback. ({e})")
+        return FALLBACK_RTC_CONFIG
 
 def main():
     st.set_page_config(
@@ -246,13 +256,13 @@ def main():
                 padding-top:1.5rem  !important;
             }
             </style> """,unsafe_allow_html=True)    
-            
+
         print("BEFORE WEBRTC")
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration =RTC_CONFIG,
+            rtc_configuration=get_rtc_config(),
             media_stream_constraints={
                 "video": True,
                 "audio":False,
