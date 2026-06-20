@@ -17,6 +17,17 @@ from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline,autoplay_audio
 
+from twilio.rest import Client
+
+def get_ice_servers():
+    account_sid = os.environ["TWILIO_ACCOUNT_SID"]
+    auth_token = os.environ["TWILIO_AUTH_TOKEN"]
+    client = Client(account_sid, auth_token)
+    token = client.tokens.create()
+    return token.ice_servers
+
+RTC_CONFIG = RTCConfiguration({"iceServers": get_ice_servers()})
+
 
 def main():
     st.set_page_config(
@@ -223,15 +234,25 @@ def main():
         """,unsafe_allow_html=True,
         )
     
-    else:
+    else: 
+        st.markdown("""<style>
+             /* Hide Top Bar of Streamlit */
+                
+            #MainMenu , footer, header {
+                visibility: hidden;
+            }
+
+            .block-container {
+                padding-top:1.5rem  !important;
+            }
+            </style> """,unsafe_allow_html=True)    
+            
         print("BEFORE WEBRTC")
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration ={
-                "iceServers": [
-                    {"urls": "stun:stun.l.google.com:19302"}]},
+            rtc_configuration =RTC_CONFIG,
             media_stream_constraints={
                 "video": True,
                 "audio":False,
