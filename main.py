@@ -262,7 +262,6 @@ def main():
             }
             </style> """,unsafe_allow_html=True)    
 
-        print("BEFORE WEBRTC")
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
@@ -274,7 +273,6 @@ def main():
             },
             async_processing=True
         )
-        print("AFTER WEBRTC")
         sync_metrics_update(context)
 
         if context.state.playing:

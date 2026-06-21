@@ -524,12 +524,14 @@ class VideoProcessorClass(VideoProcessorBase):
     def recv(self, frame):
         image = frame.to_ndarray(format="bgr24")
         image = cv2.flip(image, 1)
-
-        small = cv2.resize(image, (480, 360))  # detect on a smaller frame
+        small = cv2.resize(image, (480, 360))
         try:
-            rgb = cv2.cvtColor(small, cv2.COLOR_BGR2RGB)
-            ...
+            rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            self._frame_ts += 33
+
+            mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
             result = self._landmarker.detect_for_video(mp_image, self._frame_ts)
+
             if result.pose_landmarks:
                 landmarks = result.pose_landmarks[0]
 
