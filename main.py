@@ -29,19 +29,24 @@ FALLBACK_RTC_CONFIG = RTCConfiguration({
     ]
 })
 
+
 @st.cache_data(ttl=3000)
 def get_rtc_config():
     try:
         client = Client(os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"])
         token = client.tokens.create()
-        return RTCConfiguration({"iceServers": token.ice_servers})
+        return RTCConfiguration({
+            "iceServers": token.ice_servers,
+            "iceTransportPolicy": "relay"   # always use TURN, never flap to direct/STUN candidates
+        })
     except Exception as e:
         st.warning(f"Twilio TURN unavailable, using fallback. ({e})")
         return FALLBACK_RTC_CONFIG
 
+
 def main():
     st.set_page_config(
-    page_icon=r"C:\Users\shaurya mishra\OneDrive\Desktop\AI-GYM-Coach\ai_gym_coach_icon.svg",
+    page_icon=r"ai_gym_coach_icon.svg",
     page_title="AI Real-Time GYM Coach",
     initial_sidebar_state="auto",
     layout="centered"
