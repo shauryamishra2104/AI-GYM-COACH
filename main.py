@@ -276,7 +276,7 @@ def main():
         sync_metrics_update(context)
 
         if context.state.playing:
-            time.sleep(0.25)
+            time.sleep(1.0)
             st.rerun()
             
         inject_webrtc_styles()
