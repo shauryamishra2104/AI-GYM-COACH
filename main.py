@@ -276,9 +276,8 @@ def main():
         sync_metrics_update(context)
 
         if context.state.playing:
-            if not st.session_state.get("audio_to_play"):
-                time.sleep(1.0)
-                st.rerun()
+            time.sleep(1.0)
+            st.rerun()
             
         inject_webrtc_styles()
     
