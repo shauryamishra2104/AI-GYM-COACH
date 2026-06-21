@@ -46,7 +46,7 @@ def get_rtc_config():
 
 def main():
     st.set_page_config(
-    page_icon=r"ai_gym_coach_icon.svg",
+    page_icon="💪",
     page_title="AI Real-Time GYM Coach",
     initial_sidebar_state="auto",
     layout="centered"
@@ -276,8 +276,9 @@ def main():
         sync_metrics_update(context)
 
         if context.state.playing:
-            time.sleep(1.0)
-            st.rerun()
+            if not st.session_state.get("audio_to_play"):
+                time.sleep(1.0)
+                st.rerun()
             
         inject_webrtc_styles()
     

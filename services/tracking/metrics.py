@@ -103,13 +103,22 @@ def sync_metrics_update(context):
     
         if result:
             st.session_state.audio_to_play, st.session_state.coach_feedback = result
-
-    if st.session_state.get("voice_pipeline"):
+    
+    if "last_form_feedback" not in st.session_state:
+        st.session_state.last_form_feedback = 0
+    
+    now = time.time()
+    if (
+    st.session_state.get("voice_pipeline")
+    and not st.session_state.get("audio_to_play")
+    and now - st.session_state.last_form_feedback > 8
+    ):
         result = st.session_state.voice_pipeline.process_event(
             event="ongoing_form_check",
             exercise=exercise,
             metrics=latest_metrics,
         )
-        
+
         if result:
             st.session_state.audio_to_play, st.session_state.coach_feedback = result
+            st.session_state.last_form_feedback = now

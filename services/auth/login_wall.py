@@ -8,6 +8,17 @@ def render_login_wall():
 
     st.title("🏋 AI Real-time GYM Trainer")
     st.markdown(" Welcome! Please enter a username to start")
+    st.markdown("""<style>
+             /* Hide Top Bar of Streamlit */
+                
+            #MainMenu , footer, header {
+                visibility: hidden;
+            }
+
+            .block-container {
+                padding-top:1.5rem  !important;
+            }
+            </style> """,unsafe_allow_html=True)
 
     with st.form("login_form",clear_on_submit=False):
         username = st.text_input("Name (unique)", placeholder="unique name e.g shauryamishra")
